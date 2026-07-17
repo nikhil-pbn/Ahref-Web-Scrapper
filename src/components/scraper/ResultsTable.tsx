@@ -41,18 +41,25 @@ export function ResultsTable() {
         Upload).
       </p>
 
-      <div>
+      {/* Scroll container: the header stays pinned (sticky) while only the
+          rows scroll. The card itself never scrolls. */}
+      <div className="max-h-128 overflow-auto">
         <table className="w-full border-collapse text-left text-sm">
           <thead>
-            <tr className="border-b border-black/10 text-[11px] uppercase opacity-60 dark:border-white/10">
+            <tr className="text-[11px] rounded-t-4xl uppercase">
               {columns.map((c) => {
                 const active = sortKey === c.key;
                 return (
-                  <th key={c.key} className={`px-2 py-2 ${c.align === "right" ? "text-right" : ""}`}>
+                  <th
+                    key={c.key}
+                    className={`sticky top-0 z-10 border-b border-black/10 bg-background px-2 py-2 dark:border-white/10 ${
+                      c.align === "right" ? "text-right" : ""
+                    }`}
+                  >
                     <button
                       onClick={() => toggleSort(c.key)}
                       title="Click to sort"
-                      className={`inline-flex items-center gap-1 uppercase transition hover:opacity-100 ${
+                      className={`inline-flex items-center gap-1 uppercase opacity-60 transition hover:opacity-100 ${
                         active ? "font-semibold text-blue-400 opacity-100" : ""
                       } ${c.align === "right" ? "flex-row-reverse" : ""}`}
                     >
@@ -64,7 +71,7 @@ export function ResultsTable() {
               })}
             </tr>
           </thead>
-          <tbody className="overflow-auto max-h-120 h-120">
+          <tbody>
             {sortedResults.map((r) => (
               <tr key={`${r.position}-${r.url}`} className="border-b border-black/5 align-top dark:border-white/5">
                 {columns.map((c) => (
