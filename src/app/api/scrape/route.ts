@@ -188,11 +188,11 @@ export async function POST(req: Request) {
         const results: SiteResult[] = [];
         let doneCount = 0;
 
-        const buildResult = async (pos: (typeof positions)[number]): Promise<SiteResult> => {
+        const buildResult = async (pos: (typeof positions)[number], rank: number): Promise<SiteResult> => {
           const url = pos.url as string;
           const domain = domainFromUrl(url);
           const base: SiteResult = {
-            position: pos.position,
+            position: rank,
             url,
             domain,
             title: pos.title ?? null,
@@ -237,13 +237,15 @@ export async function POST(req: Request) {
           return base;
         };
 
-        // Simple worker pool for enrichment.
-        const queue = positions.slice();
+        // Simple worker pool for enrichment. Assign a sequential 1-based rank
+        // up front (SERP positions have gaps from ads/features) so the "#"
+        // column reads 1, 2, 3, … regardless of raw SERP position.
+        const queue = positions.map((pos, i) => ({ pos, rank: i + 1 }));
         const worker = async () => {
           for (;;) {
-            const pos = queue.shift();
-            if (!pos) return;
-            const result = await buildResult(pos);
+            const item = queue.shift();
+            if (!item) return;
+            const result = await buildResult(item.pos, item.rank);
             results.push(result);
             doneCount += 1;
             send({ type: "site", data: result });

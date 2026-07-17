@@ -43,7 +43,7 @@ export function ActivityLog() {
             >
               {entry.level}
             </span>
-            <span className="min-w-0 break-words opacity-90">{entry.message}</span>
+            <span className="min-w-0 wrap-break-word opacity-90">{entry.message}</span>
           </div>
         ))}
         <div ref={endRef} />

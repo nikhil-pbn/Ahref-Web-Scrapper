@@ -41,7 +41,7 @@ export function ResultsTable() {
         Upload).
       </p>
 
-      <div className="overflow-auto">
+      <div className="overflow-auto max-h-120 h-120">
         <table className="w-full border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-black/10 text-[11px] uppercase opacity-60 dark:border-white/10">
