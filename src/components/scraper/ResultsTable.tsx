@@ -41,7 +41,7 @@ export function ResultsTable() {
         Upload).
       </p>
 
-      <div className="overflow-auto max-h-120 h-120">
+      <div>
         <table className="w-full border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-black/10 text-[11px] uppercase opacity-60 dark:border-white/10">
@@ -64,7 +64,7 @@ export function ResultsTable() {
               })}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="overflow-auto max-h-120 h-120">
             {sortedResults.map((r) => (
               <tr key={`${r.position}-${r.url}`} className="border-b border-black/5 align-top dark:border-white/5">
                 {columns.map((c) => (
