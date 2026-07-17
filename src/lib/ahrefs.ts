@@ -54,15 +54,14 @@ async function ahrefsGet<T>(
       if (text) message = `${message}: ${text.slice(0, 300)}`;
     }
 
-    // Ahrefs often returns an empty body on auth failures — add actionable hints.
+    // Ahrefs often returns an empty body on auth failures — add actionable hints
+    // and name the endpoint so the user knows exactly what their plan is missing.
     if (res.status === 401) {
-      message =
-        "401 Unauthorized — Ahrefs rejected the API token. Check that it's a valid, non-expired Ahrefs API v3 token and that your plan has API access enabled (the API is a separate paid add-on).";
+      message = `401 Unauthorized on ${path} — Ahrefs rejected the API token. Check that it's a valid, non-expired Ahrefs API v3 token with API access enabled (the API is a separate paid add-on).`;
     } else if (res.status === 403) {
-      message =
-        "403 Forbidden — the token is not permitted to use this endpoint. Confirm your Ahrefs plan/API subscription covers it.";
+      message = `403 Forbidden on ${path} — your Ahrefs plan doesn't permit this endpoint. SERP Overview and Site Explorer are sold as separate API access levels, so a token can work for one and not the other. Check that your API subscription includes ${path}.`;
     } else if (res.status === 429) {
-      message = "429 Too Many Requests — Ahrefs rate limit or API units exhausted. Slow down or check your remaining units.";
+      message = `429 Too Many Requests on ${path} — Ahrefs rate limit or API units exhausted. Slow down or check your remaining units.`;
     }
     throw new AhrefsError(res.status, text, message);
   }
